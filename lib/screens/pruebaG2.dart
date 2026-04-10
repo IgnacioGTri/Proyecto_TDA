@@ -88,6 +88,7 @@ class _TapGameWidgetState extends State<TapGameWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Tap, Tap, ¡TAP!',
         style: TextStyle(fontSize: 24, color:Colors.red),
         ),

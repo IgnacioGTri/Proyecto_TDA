@@ -16,6 +16,7 @@ class _StarTapGameState extends State<StarTapGame> {
 
   bool _jugando = false;
   bool _respondido = false;
+  bool _muyLento = false;
 
   Timer? _timer;
 
@@ -62,6 +63,7 @@ class _StarTapGameState extends State<StarTapGame> {
     });
   }
 
+  // ================= START =================
   void _start() {
     _timer?.cancel();
 
@@ -71,6 +73,7 @@ class _StarTapGameState extends State<StarTapGame> {
       _tiempo = 20;
       _jugando = true;
       _respondido = false;
+      _muyLento = false;
     });
 
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
@@ -85,6 +88,7 @@ class _StarTapGameState extends State<StarTapGame> {
     _nuevoObjetivo();
   }
 
+  // ================= FIN =================
   void _finJuego() {
     setState(() {
       _jugando = false;
@@ -106,6 +110,7 @@ class _StarTapGameState extends State<StarTapGame> {
     );
   }
 
+  // ================= RESET =================
   void _reset() {
     _timer?.cancel();
 
@@ -116,9 +121,11 @@ class _StarTapGameState extends State<StarTapGame> {
       _jugando = false;
       _circuloActivo = -1;
       _respondido = false;
+      _muyLento = false;
     });
   }
 
+  // ================= NUEVO OBJETIVO =================
   void _nuevoObjetivo() {
     if (!_jugando) return;
 
@@ -126,33 +133,36 @@ class _StarTapGameState extends State<StarTapGame> {
       _circuloActivo = _random.nextInt(5);
       _colorActivo = _secuencia[_indexColor];
       _indexColor = (_indexColor + 1) % _secuencia.length;
-
       _respondido = false;
     });
 
     _rotarPosiciones();
 
-    // ⏱️ TIMEOUT DE 1.5s
+    // ⏱️ TIMEOUT 1s
     Future.delayed(const Duration(milliseconds: 1000), () {
       if (!_jugando) return;
 
       if (!_respondido) {
         setState(() {
           _errores++;
+          _muyLento = true;
         });
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('❌ ¡Demasiado lento!'),
-            duration: Duration(milliseconds: 500),
-          ),
-        );
+        // 🔴 Mostrar solo 0.5s
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (mounted) {
+            setState(() {
+              _muyLento = false;
+            });
+          }
+        });
       }
 
       _nuevoObjetivo();
     });
   }
 
+  // ================= TAP =================
   void _onTap(int index) {
     if (!_jugando) return;
 
@@ -166,6 +176,7 @@ class _StarTapGameState extends State<StarTapGame> {
     setState(() {});
   }
 
+  // ================= CÍRCULO =================
   Widget _circulo(int index) {
     bool activo = index == _circuloActivo;
 
@@ -196,13 +207,16 @@ class _StarTapGameState extends State<StarTapGame> {
     super.dispose();
   }
 
+  // ================= UI =================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('¡EstrellaDoS ⭐!',
-          style: TextStyle(fontSize: 24, color:Colors.red)),
+        title: const Text(
+          '¡EstrellaDoS ⭐!',
+          style: TextStyle(fontSize: 24, color: Colors.red),
+        ),
       ),
       body: Stack(
         children: [
@@ -216,7 +230,7 @@ class _StarTapGameState extends State<StarTapGame> {
             right: 0,
             child: Column(
               children: [
-                Text('⏱️Tiempo: $_tiempo s',
+                Text('⏱️ Tiempo: $_tiempo s',
                     style: const TextStyle(fontSize: 22)),
                 Text('✅ Aciertos: $_aciertos',
                     style: const TextStyle(fontSize: 18)),
@@ -225,6 +239,24 @@ class _StarTapGameState extends State<StarTapGame> {
               ],
             ),
           ),
+
+          // 🔴 MENSAJE MUY LENTO
+          if (_muyLento)
+            const Positioned(
+              bottom: 110,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Text(
+                  '¡MUY LENTO!',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ),
 
           // BOTONES
           Positioned(

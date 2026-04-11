@@ -119,7 +119,10 @@ class _LongPressGameState extends State<LongPressGame> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Timing Long Press Game 🎯'),
+        centerTitle: true,
+        title: const Text('¡Tag 2 ZEN!',
+          style: TextStyle(fontSize: 32, color: Colors.red)
+         ),
       ),
       body: Stack(
         children: [
@@ -152,6 +155,8 @@ class _LongPressGameState extends State<LongPressGame> {
             right: 0,
             child: Column(
               children: [
+                Text('¡Presiona 2 segundos!',
+                  style: const TextStyle(fontSize: 22)),
                 Text('⏱️ $_tiempo s',
                     style: const TextStyle(fontSize: 22)),
                 Text('✅ Aciertos: $_aciertos',

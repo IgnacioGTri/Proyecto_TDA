@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../BaseDeDatos/DatabaseHelper.dart'; // Asegúrate de que la ruta sea correcta
+import '../BaseDeDatos/DatabaseHelper.dart';
 
 class StarTapGame extends StatefulWidget {
   const StarTapGame({Key? key}) : super(key: key);
@@ -94,7 +94,7 @@ class _StarTapGameState extends State<StarTapGame> {
 
     // Guardar en la Base de Datos
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
-    await DatabaseHelper().insertRecord('Estrellas', _aciertos, segundosJugados);
+    await DatabaseHelper().insertRecord('EstrellaDoS', _aciertos, segundosJugados);
 
     if (!mounted) return;
 
@@ -189,7 +189,7 @@ class _StarTapGameState extends State<StarTapGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0B0C10), // Fondo muy oscuro (espacial)
+      backgroundColor: const Color(0xFF0B0C10),
       body: Container(
         decoration: const BoxDecoration(
           gradient: RadialGradient(
@@ -205,14 +205,12 @@ class _StarTapGameState extends State<StarTapGame> {
 
               const Spacer(),
 
-              // CONTENEDOR CENTRAL: Aquí ocurre la magia de la rotación
               SizedBox(
                 width: 300,
                 height: 300,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
-                    // El Sol/Centro decorativo
                     Container(
                       width: 40, height: 40,
                       decoration: BoxDecoration(
@@ -228,7 +226,7 @@ class _StarTapGameState extends State<StarTapGame> {
                     if (_muyLento)
                       const Center(
                         child: Text(
-                          '¡LENTO!',
+                          '¡MUY LENTO!',
                           style: TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.w900,
@@ -258,7 +256,7 @@ class _StarTapGameState extends State<StarTapGame> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white), onPressed: () => Navigator.pop(context)),
-        const Text('ESTRELLAS', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 2)),
+        const Text('ESTRELLADoS', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 2)),
         const SizedBox(width: 40),
       ],
     ),
@@ -303,14 +301,13 @@ class _StarTapGameState extends State<StarTapGame> {
     bool activo = index == _circuloActivo;
 
     return Positioned(
-      // 150 es el centro del SizedBox de 300x300, menos 35 (mitad del tamaño del círculo)
       left: 150 + _posiciones[index].dx - 35,
       top: 150 + _posiciones[index].dy - 35,
       child: GestureDetector(
         onTapDown: (_) => _onTap(index),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          width: 70, // Círculos un poco más grandes (eran 60)
+          width: 70,
           height: 70,
           decoration: BoxDecoration(
             color: activo ? _colorActivo : Colors.white.withOpacity(0.05),

@@ -11,29 +11,28 @@ class SimonDiceGame extends StatefulWidget {
 }
 
 class _SimonDiceGameState extends State<SimonDiceGame> {
-  // Estado del juego
+
   bool _jugando = false;
   bool _esTurnoDelSistema = false;
-  int _ronda = 0; // Puntuación actual (rondas superadas)
+  int _ronda = 0;
   late DateTime _horaInicioPartida;
 
-  // Secuencias
+
   List<int> _secuenciaObjetivo = [];
   List<int> _secuenciaUsuario = [];
 
-  // Control visual
-  int _botonIluminado = -1; // -1 significa ninguno
+
+  int _botonIluminado = -1;
   final Random _random = Random();
 
-  // Los 4 colores neón del panel
+  // Los 4 colores del panel
   final List<Color> _colores = [
-    Colors.redAccent,    // 0: Arriba Izquierda
-    Colors.greenAccent,  // 1: Arriba Derecha
-    Colors.blueAccent,   // 2: Abajo Izquierda
-    Colors.amberAccent,  // 3: Abajo Derecha
+    Colors.redAccent,
+    Colors.greenAccent,
+    Colors.blueAccent,
+    Colors.amberAccent,
   ];
 
-  // ================= LÓGICA DEL JUEGO =================
 
   void _start() {
     setState(() {
@@ -44,7 +43,6 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
       _horaInicioPartida = DateTime.now();
     });
 
-    // Pequeña pausa antes de empezar
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) _siguienteRonda();
     });
@@ -68,7 +66,7 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
       _botonIluminado = -1;
     });
 
-    // Guardamos en la Base de Datos (La puntuación es la ronda a la que llegaste)
+    // Guarda en la Base de Datos
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
     await DatabaseHelper().insertRecord('Simon Dice', _ronda, segundosJugados);
 
@@ -111,14 +109,13 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
       _secuenciaObjetivo.add(_random.nextInt(4));
     });
 
-    // Pequeña pausa para separar las rondas
+    // pausa entre rondas
     await Future.delayed(const Duration(milliseconds: 800));
 
-    // Reproducir secuencia
     for (int i = 0; i < _secuenciaObjetivo.length; i++) {
       if (!mounted || !_jugando) return;
 
-      // Iluminar botón
+      // esto ilumina el botón
       setState(() => _botonIluminado = _secuenciaObjetivo[i]);
 
       // El tiempo de luz se hace un pelín más rápido en rondas altas
@@ -127,7 +124,7 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
 
       if (!mounted || !_jugando) return;
 
-      // Apagar botón
+      // esto apaga el botón
       setState(() => _botonIluminado = -1);
 
       // Tiempo oscuro entre luces
@@ -143,10 +140,8 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
   }
 
   void _onBotonPulsado(int index) async {
-    // Si no estás jugando o le toca al sistema, ignoramos tus toques
     if (!_jugando || _esTurnoDelSistema) return;
 
-    // Iluminar el botón brevemente como feedback táctil
     setState(() => _botonIluminado = index);
     Future.delayed(const Duration(milliseconds: 150), () {
       if (mounted) setState(() => _botonIluminado = -1);
@@ -155,19 +150,19 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
     _secuenciaUsuario.add(index);
     int posicionActual = _secuenciaUsuario.length - 1;
 
-    // Comprobar si has fallado
+    // Comprobacion si fallas
     if (_secuenciaUsuario[posicionActual] != _secuenciaObjetivo[posicionActual]) {
       _finJuego();
       return;
     }
 
-    // Comprobar si has completado la secuencia entera correctamente
+    // Comprobación si has completado la secuencia entera correctamente
     if (_secuenciaUsuario.length == _secuenciaObjetivo.length) {
       setState(() {
-        _esTurnoDelSistema = true; // Bloqueamos para que no pulses de más
+        _esTurnoDelSistema = true; // Se bloquea para que el jugador no pulse de más
         _ronda++;
       });
-      // Empezar siguiente ronda
+
       _siguienteRonda();
     }
   }
@@ -175,7 +170,7 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F172A), // Fondo azul muy oscuro
+      backgroundColor: const Color(0xFF0F172A),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -192,7 +187,6 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
 
               const Spacer(),
 
-              // Mensaje de estado (TURNO)
               AnimatedOpacity(
                 opacity: _jugando ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 300),
@@ -209,7 +203,6 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
 
               const SizedBox(height: 30),
 
-              // ================= PANEL NEÓN (2x2) =================
               SizedBox(
                 width: 320,
                 height: 320,
@@ -246,8 +239,6 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
       ),
     );
   }
-
-  // --- WIDGETS UI ---
 
   Widget _customAppBar() => Padding(
     padding: const EdgeInsets.all(20.0),
@@ -299,18 +290,17 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
     ),
   );
 
-  // Widget clave: El botón que brilla
   Widget _botonSimon(int index) {
     bool estaEncendido = _botonIluminado == index;
     Color colorBase = _colores[index];
 
     return GestureDetector(
-      onTapDown: (_) => _onBotonPulsado(index), // Usamos onTapDown para respuesta inmediata
+      onTapDown: (_) => _onBotonPulsado(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
         decoration: BoxDecoration(
           color: estaEncendido ? colorBase : colorBase.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(30), // Bordes muy redondeados
+          borderRadius: BorderRadius.circular(30),
           border: Border.all(
             color: estaEncendido ? Colors.white : colorBase.withOpacity(0.3),
             width: estaEncendido ? 3 : 2,

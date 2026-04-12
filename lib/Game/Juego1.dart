@@ -93,7 +93,6 @@ class _TapGameWidgetState extends State<TapGameWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Fondo con gradiente sutil
       body: Container(
         width: double.infinity,
         decoration: BoxDecoration(
@@ -106,7 +105,6 @@ class _TapGameWidgetState extends State<TapGameWidget> {
         child: SafeArea(
           child: Column(
             children: [
-              // AppBar Personalizado
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Row(
@@ -116,7 +114,7 @@ class _TapGameWidgetState extends State<TapGameWidget> {
                       icon: const Icon(Icons.arrow_back_ios_new),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Text('TAP CHALLENGE',
+                    const Text('¡TAP, TAP!',
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, letterSpacing: 1)),
                     const Icon(Icons.info_outline, color: Colors.transparent), // Para equilibrar el Row
                   ],
@@ -136,7 +134,7 @@ class _TapGameWidgetState extends State<TapGameWidget> {
 
               const Spacer(),
 
-              // El botón de TAP Neomórfico/Animado
+              // El botón del TAP
               GestureDetector(
                 onTap: _sumarTap,
                 child: AnimatedScale(

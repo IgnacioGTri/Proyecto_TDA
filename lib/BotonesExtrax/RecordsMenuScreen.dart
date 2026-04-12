@@ -23,7 +23,7 @@ class RecordsMenuScreen extends StatelessWidget {
               int totalSeg = snapshot.data ?? 0;
               Duration d = Duration(seconds: totalSeg);
 
-              // Lógica de formato: Horas si existen, si no solo minutos y segundos
+              // Horas si existen, si no solo minutos y segundos
               String tiempoTotal = d.inHours > 0
                   ? "${d.inHours}h ${d.inMinutes.remainder(60)}m ${d.inSeconds.remainder(60)}s"
                   : "${d.inMinutes}m ${d.inSeconds.remainder(60)}s";
@@ -64,7 +64,7 @@ class RecordsMenuScreen extends StatelessWidget {
 
           const Divider(height: 1, thickness: 1),
 
-          // --- LISTA DE RÉCORDS INDIVIDUALES ---
+          // --- LISTA DE RÉCORDS ---
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -111,7 +111,6 @@ class RecordsMenuScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: Colors.black, width: 2),
-        // Sutil sombra para que combine con el estilo de dibujo
         boxShadow: const [
           BoxShadow(color: Colors.black, offset: Offset(4, 4)),
         ],

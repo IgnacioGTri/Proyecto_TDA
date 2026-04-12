@@ -13,7 +13,6 @@ class DragShapesGame extends StatefulWidget {
 class _DragShapesGameState extends State<DragShapesGame> {
   int _aciertos = 0;
   int _errores = 0;
-  // 🔥 Ajustado a 20 segundos de base
   int _tiempo = 20;
 
   bool _jugando = false;
@@ -57,7 +56,6 @@ class _DragShapesGameState extends State<DragShapesGame> {
     setState(() {
       _aciertos = 0;
       _errores = 0;
-      // 🔥 Ajustado a 20 segundos al darle a START
       _tiempo = 20;
       _jugando = true;
       _muyLento = false;
@@ -84,7 +82,6 @@ class _DragShapesGameState extends State<DragShapesGame> {
       _jugando = false;
       _aciertos = 0;
       _errores = 0;
-      // 🔥 Ajustado a 20 segundos al darle a RESET
       _tiempo = 20;
       _muyLento = false;
       _objetivo = '';
@@ -223,7 +220,7 @@ class _DragShapesGameState extends State<DragShapesGame> {
                     if (_muyLento)
                       const Center(
                         child: Text(
-                          '¡LENTO!',
+                          '¡MUY LENTO!',
                           style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: Colors.redAccent, shadows: [Shadow(color: Colors.red, blurRadius: 15)]),
                         ),
                       ),
@@ -246,7 +243,7 @@ class _DragShapesGameState extends State<DragShapesGame> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white), onPressed: () => Navigator.pop(context)),
-        const Text('SHAPE MATCH', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.blueAccent, letterSpacing: 2)),
+        const Text('UNE LAS FORMAS', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.blueAccent, letterSpacing: 2)),
         const SizedBox(width: 40),
       ],
     ),

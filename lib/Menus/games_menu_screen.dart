@@ -5,7 +5,7 @@ import '../Game/Juego3.dart'; // StarTapGame
 import '../Game/Juego4.dart'; // LongPressGame
 import '../Game/Juego5.dart'; // DoubleTapGame
 import '../Game/Juego6.dart'; // DragShapesGame
-import '../Game/Juego7.dart'; // SimonDiceGame (AÑADIDO)
+import '../Game/Juego7.dart'; // SimonDiceGame
 
 class GamesMenuScreen extends StatelessWidget {
   const GamesMenuScreen({super.key});
@@ -30,9 +30,9 @@ class GamesMenuScreen extends StatelessWidget {
           mainAxisSpacing: 20,
           children: [
             _gameCard(context, 'TAP TAP', Icons.touch_app, Colors.orange, const TapGameWidget()),
-            _gameCard(context, 'ARRASTRA', Icons.ads_click, Colors.blue, const DragGameWidget()),
-            _gameCard(context, 'ESTRELLAS', Icons.auto_awesome, Colors.amber, const StarTapGame()),
-            _gameCard(context, 'MANTÉN', Icons.timer_outlined, Colors.green, const LongPressGame()),
+            _gameCard(context, '¡ARRASTRAME!', Icons.ads_click, Colors.blue, const DragGameWidget()),
+            _gameCard(context, 'ESTRELLADoS', Icons.auto_awesome, Colors.amber, const StarTapGame()),
+            _gameCard(context, 'TAG 2 ZEN', Icons.timer_outlined, Colors.green, const LongPressGame()),
             _gameCard(context, 'DOBLE TAP', Icons.repeat_one, Colors.purple, const DoubleTapGame()),
             _gameCard(context, 'FORMAS', Icons.category_rounded, Colors.red, const DragShapesGame()),
             _gameCard(context, 'SIMON DICE', Icons.memory, Colors.pinkAccent, const SimonDiceGame()),
@@ -42,7 +42,7 @@ class GamesMenuScreen extends StatelessWidget {
     );
   }
 
-  // Widget para crear tarjetas de juego estéticas
+
   Widget _gameCard(BuildContext context, String nombre, IconData icono, Color color, Widget destino) {
     return GestureDetector(
       onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => destino)),

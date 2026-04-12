@@ -10,7 +10,7 @@ class MainMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Fondo con un sutil gradiente para que no sea solo blanco
+
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -25,11 +25,19 @@ class MainMenuScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Título o Logo de la App
                 const Text(
-                  "T.D.A",
+                  "T.D.A. ",
                   style: TextStyle(
                     fontSize: 40,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 3,
+                    color: Colors.black87,
+                  ),
+                ),
+                const Text(
+                  "(Tactile Digital Activity)",
+                  style: TextStyle(
+                    fontSize: 20,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 3,
                     color: Colors.black87,
@@ -65,7 +73,6 @@ class MainMenuScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
 
-                // Botón de salir más discreto
                 TextButton.icon(
                   onPressed: () => SystemNavigator.pop(),
                   icon: const Icon(Icons.exit_to_app, color: Colors.grey),
@@ -79,7 +86,6 @@ class MainMenuScreen extends StatelessWidget {
     );
   }
 
-  // Nuevo diseño de botón: Más moderno, con icono y elevación
   Widget _menuButton(BuildContext context, String text, IconData icon, Color color, VoidCallback onPressed) {
     return Container(
       width: double.infinity,
@@ -102,7 +108,7 @@ class MainMenuScreen extends StatelessWidget {
           foregroundColor: Colors.white,
           textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: 1.2),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          elevation: 0, // La sombra la da el Container para más control
+          elevation: 0,
         ),
         onPressed: onPressed,
       ),

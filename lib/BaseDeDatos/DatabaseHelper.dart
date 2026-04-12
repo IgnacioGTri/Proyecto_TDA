@@ -36,14 +36,13 @@ class DatabaseHelper {
   }
   Future<List<Map<String, dynamic>>> getRecords() async {
     final db = await database;
-    // Esto devuelve todos los records ordenados por puntuación (del más alto al más bajo)
+    //devuelve todos los records ordenados por puntuación
     return await db.query('records', orderBy: 'puntuacion DESC');
   }
 
   Future<void> insertRecord(String juego, int puntos, int segundos) async {
     final db = await database;
 
-    // 1. Buscamos si ya existe un registro para este juego
     List<Map<String, dynamic>> existente = await db.query(
       'records',
       where: 'nombreJuego = ?',
@@ -51,7 +50,6 @@ class DatabaseHelper {
     );
 
     if (existente.isEmpty) {
-      // 2. Si no existe, lo creamos por primera vez
       await db.insert('records', {
         'nombreJuego': juego,
         'puntuacion': puntos,
@@ -60,11 +58,10 @@ class DatabaseHelper {
       });
       print("Primer record guardado para $juego");
     } else {
-      // 3. Si existe, comparamos la puntuación
       int recordActual = existente.first['puntuacion'];
 
       if (puntos > recordActual) {
-        // Solo actualizamos si la nueva puntuación es mejor
+        // para que actiualice solo si la nueva puntuación es mejor
         await db.update(
           'records',
           {

@@ -13,7 +13,6 @@ class DoubleTapGame extends StatefulWidget {
 class _DoubleTapGameState extends State<DoubleTapGame> {
   int _aciertos = 0;
   int _fallos = 0;
-  // 🔥 Bajado a 20 segundos
   int _tiempo = 20;
 
   bool _jugando = false;
@@ -34,7 +33,6 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
     setState(() {
       _aciertos = 0;
       _fallos = 0;
-      // 🔥 Bajado a 20 segundos
       _tiempo = 20;
       _jugando = true;
       _muyLento = false;
@@ -61,7 +59,6 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       _jugando = false;
       _aciertos = 0;
       _fallos = 0;
-      // 🔥 Bajado a 20 segundos
       _tiempo = 20;
       _circuloActivo = -1;
       _muyLento = false;
@@ -76,7 +73,7 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       _circuloActivo = -1;
     });
 
-    // Guardar en la Base de Datos
+    // Guardado en la Base de Datos
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
     await DatabaseHelper().insertRecord('Double Tap', _aciertos, segundosJugados);
 
@@ -119,7 +116,6 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
     });
 
     _targetTimer?.cancel();
-    // 1.5 segundos para hacer doble click
     _targetTimer = Timer(const Duration(milliseconds: 1500), () {
       if (!mounted || !_jugando) return;
 
@@ -144,7 +140,7 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
     setState(() {
       if (index == _circuloActivo) {
         _aciertos++;
-        _circuloActivo = -1; // Lo apagamos al instante para dar feedback visual
+        _circuloActivo = -1;
       } else {
         _fallos++;
       }
@@ -166,7 +162,7 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF130920), // Fondo Arcade Oscuro
+      backgroundColor: const Color(0xFF130920),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -183,13 +179,11 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
 
               const Spacer(),
 
-              // ================= ÁREA DE JUEGO =================
               SizedBox(
                 width: 320,
                 height: 320,
                 child: Stack(
                   children: [
-                    // El borde de la zona de juego (estilo radar/arena)
                     Center(
                       child: Container(
                         width: 250, height: 250,
@@ -210,7 +204,7 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
                     if (_muyLento)
                       const Center(
                         child: Text(
-                          '¡LENTO!',
+                          '¡MUY LENTO!',
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.w900,
@@ -232,7 +226,6 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
     );
   }
 
-  // --- WIDGETS UI ---
 
   Widget _customAppBar() => Padding(
     padding: const EdgeInsets.all(20.0),
@@ -240,7 +233,7 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white), onPressed: () => Navigator.pop(context)),
-        const Text('DOUBLE TAAAP', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 2)),
+        const Text('DOUBLE TAP', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 2)),
         const SizedBox(width: 40),
       ],
     ),

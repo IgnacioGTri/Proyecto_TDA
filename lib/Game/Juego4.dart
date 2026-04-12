@@ -65,7 +65,7 @@ class _LongPressGameState extends State<LongPressGame> {
   void _finJuego() async {
     setState(() => _jugando = false);
 
-    // Guardar en la Base de Datos
+    // esto guarda en la Base de Datos
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
     await DatabaseHelper().insertRecord('Tag 2 ZEN', _aciertos, segundosJugados);
 
@@ -100,7 +100,7 @@ class _LongPressGameState extends State<LongPressGame> {
     );
   }
 
-  // ===================== LOGICA LONG PRESS =====================
+
   void _onLongPressStart() {
     if (!_jugando) return;
 
@@ -153,13 +153,13 @@ class _LongPressGameState extends State<LongPressGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF12121E), // Fondo oscuro
+      backgroundColor: const Color(0xFF12121E),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF2A1B3D), Color(0xFF12121E)], // Púrpura Zen a Oscuro
+            colors: [Color(0xFF2A1B3D), Color(0xFF12121E)],
           ),
         ),
         child: SafeArea(
@@ -170,16 +170,16 @@ class _LongPressGameState extends State<LongPressGame> {
 
               const Spacer(),
 
-              // ===================== ÁREA DE JUEGO =====================
+
               GestureDetector(
                 onLongPressStart: (_) => _onLongPressStart(),
                 onLongPressEnd: (_) => _onLongPressEnd(),
-                // Usamos onLongPressCancel por si el usuario desliza el dedo fuera accidentalmente
+                // había que usar onLongPressCancel por si el jugador desliza el dedo fuera accidentalmente
                 onLongPressCancel: () {
                   if (_presionando) _onLongPressEnd();
                 },
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: _presionando ? 3000 : 300), // Crece lento (3s), se encoge rápido (0.3s)
+                  duration: Duration(milliseconds: _presionando ? 3000 : 300),
                   curve: _presionando ? Curves.easeOut : Curves.easeIn,
                   width: _presionando ? 260 : 180,
                   height: _presionando ? 260 : 180,
@@ -219,7 +219,6 @@ class _LongPressGameState extends State<LongPressGame> {
     );
   }
 
-  // --- WIDGETS UI MODULARES ---
 
   Widget _customAppBar() => Padding(
     padding: const EdgeInsets.all(20.0),

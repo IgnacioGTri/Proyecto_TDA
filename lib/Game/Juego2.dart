@@ -32,7 +32,7 @@ class _DragGameWidgetState extends State<DragGameWidget> {
   void _nuevoObjetivo() {
     setState(() {
       _objetivo = _esquinas[Random().nextInt(_esquinas.length)];
-      _gestoProcesado = false; // Reset para el siguiente movimiento
+      _gestoProcesado = false;
     });
   }
 
@@ -60,7 +60,7 @@ class _DragGameWidgetState extends State<DragGameWidget> {
   void _finJuego() async {
     setState(() => _jugando = false);
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
-    await DatabaseHelper().insertRecord('Drag Game', _aciertos, segundosJugados);
+    await DatabaseHelper().insertRecord('Arrastrame', _aciertos, segundosJugados);
 
     if (!mounted) return;
     showDialog(
@@ -75,13 +75,13 @@ class _DragGameWidgetState extends State<DragGameWidget> {
     );
   }
 
-  // ESTA ES LA FUNCIÓN CLAVE: Detecta el movimiento en tiempo real
+  // se detecta el movimiento en tiempo real
   void _detectarMovimiento(DragUpdateDetails details) {
     if (!_jugando || _gestoProcesado) return;
 
-    // Miramos hacia dónde se mueve el dedo respecto al centro del widget
-    double dx = details.localPosition.dx - 100; // 100 es la mitad del ancho del detector
-    double dy = details.localPosition.dy - 100; // 100 es la mitad del alto del detector
+    // detecta hacia dónde se mueve el dedo respecto al centro del widget
+    double dx = details.localPosition.dx - 100;
+    double dy = details.localPosition.dy - 100;
 
     String direccion = '';
     double umbral = 40.0; // Distancia necesaria para que cuente como movimiento
@@ -93,7 +93,7 @@ class _DragGameWidgetState extends State<DragGameWidget> {
       if (dx > umbral && dy > umbral) direccion = '↘️';
 
       if (direccion != '') {
-        _gestoProcesado = true; // Bloqueamos hasta el siguiente objetivo
+        _gestoProcesado = true;
         setState(() {
           if (direccion == _objetivo) {
             _aciertos++;
@@ -103,7 +103,7 @@ class _DragGameWidgetState extends State<DragGameWidget> {
             _mensaje = '❌ ¡NO!';
           }
         });
-        // Esperamos un pelín para que el usuario vea el feedback antes del siguiente
+        // Esperamos un pelín para que el usuario vea el resultado antes del siguiente
         Future.delayed(const Duration(milliseconds: 300), _nuevoObjetivo);
       }
     }
@@ -160,8 +160,7 @@ class _DragGameWidgetState extends State<DragGameWidget> {
     );
   }
 
-  // --- WIDGETS AUXILIARES ---
-  Widget _header() => Padding(padding: const EdgeInsets.all(20), child: Row(children: [IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back_ios)), const Text('DRAG GAME', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))]));
+  Widget _header() => Padding(padding: const EdgeInsets.all(20), child: Row(children: [IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back_ios)), const Text('¡ARRASTRAME!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))]));
 
   Widget _stats() => Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
     _card('TIEMPO', '$_tiempo', Colors.orange),

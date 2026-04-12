@@ -1,32 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:primerflutter/screens/FormularioEje1.dart';
-import 'package:primerflutter/screens/FormularioEje2.dart';
-import 'package:primerflutter/screens/columnas.dart';
-import 'package:primerflutter/screens/gestos.dart';
-import 'package:primerflutter/screens/pruebaG1.dart';
-import 'package:primerflutter/screens/pruebaG2.dart';
-import 'package:primerflutter/screens/pruebaG3.dart';
-import 'package:primerflutter/screens/pruebaG5.dart';
-import 'package:primerflutter/screens/pruebaG6.dart';
-import 'package:primerflutter/screens/pruebaG4.dart';
-import 'package:primerflutter/screens/pruebaG7.dart';
+import 'Menus/main_menu_screen.dart';
 
-void main() => runApp(MiMaterialApp());
+void main() => runApp(const MiMenuApp());
 
-class MiMaterialApp extends StatelessWidget{
+class MiMenuApp extends StatelessWidget {
+  const MiMenuApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
-       //home: FormularioPage(),
-       //home: FormularioPage2() ,
-       //home: GestureHomeWidget2(),
-       //home: TapGameWidget(),
-      //home: DragGameWidget(),
-     // home: StarTapGame(),
-     // home: LongPressGame(),
-      //home: DoubleTapGame(),
-       home: DragShapesGame(),
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'Prototipo Menú',
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+        ),
+      ),
+      home: const MainMenuScreen(),
     );
   }
 }

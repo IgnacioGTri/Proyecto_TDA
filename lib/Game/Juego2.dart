@@ -5,11 +5,9 @@ import '../BaseDeDatos/DatabaseHelper.dart';
 
 class DragGameWidget extends StatefulWidget {
   const DragGameWidget({Key? key}) : super(key: key);
-
   @override
   _DragGameWidgetState createState() => _DragGameWidgetState();
 }
-
 class _DragGameWidgetState extends State<DragGameWidget> {
   String _mensaje = '¿LISTO?';
   String _objetivo = '';
@@ -17,7 +15,7 @@ class _DragGameWidgetState extends State<DragGameWidget> {
   int _errores = 0;
   int _tiempo = 20;
   bool _jugando = false;
-  bool _gestoProcesado = false; // Para evitar que un solo toque cuente como mil aciertos
+  bool _gestoProcesado = false;
   late DateTime _horaInicioPartida;
 
   Timer? _timer;
@@ -60,7 +58,7 @@ class _DragGameWidgetState extends State<DragGameWidget> {
   void _finJuego() async {
     setState(() => _jugando = false);
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
-    await DatabaseHelper().insertRecord('Arrastrame', _aciertos, segundosJugados);
+    await DatabaseHelper().insertRecord('Drag Game', _aciertos, segundosJugados);
 
     if (!mounted) return;
     showDialog(
@@ -74,17 +72,12 @@ class _DragGameWidgetState extends State<DragGameWidget> {
       ),
     );
   }
-
-  // se detecta el movimiento en tiempo real
   void _detectarMovimiento(DragUpdateDetails details) {
     if (!_jugando || _gestoProcesado) return;
-
-    // detecta hacia dónde se mueve el dedo respecto al centro del widget
     double dx = details.localPosition.dx - 100;
     double dy = details.localPosition.dy - 100;
-
     String direccion = '';
-    double umbral = 40.0; // Distancia necesaria para que cuente como movimiento
+    double umbral = 40.0;
 
     if (dx.abs() > umbral || dy.abs() > umbral) {
       if (dx < -umbral && dy < -umbral) direccion = '↖️';
@@ -103,12 +96,10 @@ class _DragGameWidgetState extends State<DragGameWidget> {
             _mensaje = '❌ ¡NO!';
           }
         });
-        // Esperamos un pelín para que el usuario vea el resultado antes del siguiente
         Future.delayed(const Duration(milliseconds: 300), _nuevoObjetivo);
       }
     }
   }
-
   @override
   void dispose() { _timer?.cancel(); super.dispose(); }
 
@@ -126,7 +117,6 @@ class _DragGameWidgetState extends State<DragGameWidget> {
                   _header(),
                   _stats(),
                   const Spacer(),
-                  // EL DETECTOR DE MOVIMIENTO
                   GestureDetector(
                     onPanUpdate: _detectarMovimiento,
                     child: Container(
@@ -160,7 +150,7 @@ class _DragGameWidgetState extends State<DragGameWidget> {
     );
   }
 
-  Widget _header() => Padding(padding: const EdgeInsets.all(20), child: Row(children: [IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back_ios)), const Text('¡ARRASTRAME!', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))]));
+  Widget _header() => Padding(padding: const EdgeInsets.all(20), child: Row(children: [IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.arrow_back_ios)), const Text('DRAG GAME', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))]));
 
   Widget _stats() => Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
     _card('TIEMPO', '$_tiempo', Colors.orange),
@@ -173,6 +163,5 @@ class _DragGameWidgetState extends State<DragGameWidget> {
     bool activo = id == _objetivo && _jugando;
     return Align(alignment: a, child: Padding(padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 150), child: AnimatedContainer(duration: const Duration(milliseconds: 200), padding: const EdgeInsets.all(10), decoration: BoxDecoration(shape: BoxShape.circle, color: activo ? Colors.blue : Colors.transparent, border: Border.all(color: activo ? Colors.blue : Colors.grey.shade300)), child: Text(id, style: const TextStyle(fontSize: 25)))));
   }
-
   Widget _controles() => Padding(padding: const EdgeInsets.all(40), child: Row(children: [Expanded(child: ElevatedButton(onPressed: _jugando ? null : _start, style: ElevatedButton.styleFrom(backgroundColor: Colors.black, foregroundColor: Colors.white), child: const Text('START'))), const SizedBox(width: 10), IconButton(onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const DragGameWidget())), icon: const Icon(Icons.refresh))]));
 }

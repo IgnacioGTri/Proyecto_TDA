@@ -16,18 +16,14 @@ class RecordsMenuScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // --- PANEL DE TIEMPO TOTAL ---
           FutureBuilder<int>(
             future: DatabaseHelper().obtenerTiempoTotal(),
             builder: (context, snapshot) {
               int totalSeg = snapshot.data ?? 0;
               Duration d = Duration(seconds: totalSeg);
-
-              // Horas si existen, si no solo minutos y segundos
               String tiempoTotal = d.inHours > 0
                   ? "${d.inHours}h ${d.inMinutes.remainder(60)}m ${d.inSeconds.remainder(60)}s"
                   : "${d.inMinutes}m ${d.inSeconds.remainder(60)}s";
-
               return Container(
                 width: double.infinity,
                 margin: const EdgeInsets.all(20),
@@ -52,7 +48,7 @@ class RecordsMenuScreen extends StatelessWidget {
                       tiempoTotal,
                       style: const TextStyle(
                           fontSize: 28,
-                          fontWeight: FontWeight.w900, // <--- Correcto (equivale a Black)
+                          fontWeight: FontWeight.w900,
                           color: Colors.blueAccent
                       ),
                     ),
@@ -63,8 +59,6 @@ class RecordsMenuScreen extends StatelessWidget {
           ),
 
           const Divider(height: 1, thickness: 1),
-
-          // --- LISTA DE RÉCORDS ---
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -88,9 +82,18 @@ class RecordsMenuScreen extends StatelessWidget {
                     itemCount: records.length,
                     itemBuilder: (context, index) {
                       final item = records[index];
+                      String idJuego = item['nombreJuego'] ?? "Juego";
+                      String nombrePantalla = idJuego.toUpperCase();
+                      String sufijoPuntuacion = "Taps";
+
+                      if (idJuego == 'juego8') {
+                        nombrePantalla = "3 PUERTAS";
+                        sufijoPuntuacion = "Victorias";
+                      }
+
                       return _recordTile(
-                          item['nombreJuego'] ?? "Juego",
-                          "${item['puntuacion']} Taps",
+                          nombrePantalla,
+                          "${item['puntuacion']} $sufijoPuntuacion",
                           "${item['segundosJugados']}s"
                       );
                     },
@@ -129,9 +132,10 @@ class RecordsMenuScreen extends StatelessWidget {
           ),
           Text(
               puntuacion,
-              style:  TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
-                  color: Colors.blueAccent
+                  color: Colors.blueAccent,
+                  fontWeight: FontWeight.bold
               )
           ),
         ],

@@ -2,14 +2,11 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import '../BaseDeDatos/DatabaseHelper.dart';
-
 class StarTapGame extends StatefulWidget {
   const StarTapGame({Key? key}) : super(key: key);
-
   @override
   State<StarTapGame> createState() => _StarTapGameState();
 }
-
 class _StarTapGameState extends State<StarTapGame> {
   int _aciertos = 0;
   int _errores = 0;
@@ -91,10 +88,8 @@ class _StarTapGameState extends State<StarTapGame> {
       _jugando = false;
       _circuloActivo = -1;
     });
-
-    // Guardar en la Base de Datos
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
-    await DatabaseHelper().insertRecord('EstrellaDoS', _aciertos, segundosJugados);
+    await DatabaseHelper().insertRecord('Estrellas', _aciertos, segundosJugados);
 
     if (!mounted) return;
 
@@ -123,7 +118,6 @@ class _StarTapGameState extends State<StarTapGame> {
       ),
     );
   }
-
   void _reset() {
     _timer?.cancel();
     setState(() {
@@ -136,7 +130,6 @@ class _StarTapGameState extends State<StarTapGame> {
       _muyLento = false;
     });
   }
-
   void _nuevoObjetivo() {
     if (!_jugando) return;
 
@@ -146,9 +139,7 @@ class _StarTapGameState extends State<StarTapGame> {
       _indexColor = (_indexColor + 1) % _secuencia.length;
       _respondido = false;
     });
-
     _rotarPosiciones();
-
     Future.delayed(const Duration(milliseconds: 1000), () {
       if (!mounted || !_jugando) return;
 
@@ -167,25 +158,23 @@ class _StarTapGameState extends State<StarTapGame> {
   }
 
   void _onTap(int index) {
-    if (!_jugando || _respondido) return; // Evita doble toque
+    if (!_jugando || _respondido) return;
 
     if (index == _circuloActivo) {
       setState(() {
         _aciertos++;
         _respondido = true;
-        _circuloActivo = -1; // Lo apagamos al tocarlo
+        _circuloActivo = -1;
       });
     } else {
       setState(() => _errores++);
     }
   }
-
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -202,9 +191,7 @@ class _StarTapGameState extends State<StarTapGame> {
             children: [
               _customAppBar(),
               _scoreBoard(),
-
               const Spacer(),
-
               SizedBox(
                 width: 300,
                 height: 300,
@@ -219,14 +206,11 @@ class _StarTapGameState extends State<StarTapGame> {
                         border: Border.all(color: Colors.white24),
                       ),
                     ),
-                    // Los círculos giratorios
                     for (int i = 0; i < 5; i++) _circuloEstrella(i),
-
-                    // Alerta de MUY LENTO
                     if (_muyLento)
                       const Center(
                         child: Text(
-                          '¡MUY LENTO!',
+                          '¡LENTO!',
                           style: TextStyle(
                             fontSize: 35,
                             fontWeight: FontWeight.w900,
@@ -248,15 +232,13 @@ class _StarTapGameState extends State<StarTapGame> {
     );
   }
 
-  // --- WIDGETS UI ---
-
   Widget _customAppBar() => Padding(
     padding: const EdgeInsets.all(20.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white), onPressed: () => Navigator.pop(context)),
-        const Text('ESTRELLADoS', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 2)),
+        const Text('ESTRELLAS', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900, color: Colors.white, letterSpacing: 2)),
         const SizedBox(width: 40),
       ],
     ),

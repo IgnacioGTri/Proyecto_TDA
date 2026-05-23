@@ -30,13 +30,10 @@ class DatabaseHelper {
   Future<int> obtenerTiempoTotal() async {
     final db = await database;
     var resultado = await db.rawQuery('SELECT SUM(segundosJugados) as total FROM records');
-
-    // Si no hay datos, devolvemos 0
     return resultado.first['total'] as int? ?? 0;
   }
   Future<List<Map<String, dynamic>>> getRecords() async {
     final db = await database;
-    //devuelve todos los records ordenados por puntuación
     return await db.query('records', orderBy: 'puntuacion DESC');
   }
 
@@ -61,7 +58,6 @@ class DatabaseHelper {
       int recordActual = existente.first['puntuacion'];
 
       if (puntos > recordActual) {
-        // para que actiualice solo si la nueva puntuación es mejor
         await db.update(
           'records',
           {

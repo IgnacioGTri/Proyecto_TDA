@@ -14,22 +14,16 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
   int _aciertos = 0;
   int _fallos = 0;
   int _tiempo = 20;
-
   bool _jugando = false;
   bool _muyLento = false;
   late DateTime _horaInicioPartida;
-
   int _circuloActivo = -1;
-
   Timer? _gameTimer;
   Timer? _targetTimer;
-
   final Random _random = Random();
-
   void _start() {
     _gameTimer?.cancel();
     _targetTimer?.cancel();
-
     setState(() {
       _aciertos = 0;
       _fallos = 0;
@@ -38,9 +32,7 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       _muyLento = false;
       _horaInicioPartida = DateTime.now();
     });
-
     _nuevoObjetivo();
-
     _gameTimer = Timer.periodic(const Duration(seconds: 1), (t) {
       if (_tiempo > 0) {
         setState(() => _tiempo--);
@@ -50,11 +42,9 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       }
     });
   }
-
   void _reset() {
     _gameTimer?.cancel();
     _targetTimer?.cancel();
-
     setState(() {
       _jugando = false;
       _aciertos = 0;
@@ -72,8 +62,6 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       _jugando = false;
       _circuloActivo = -1;
     });
-
-    // Guardado en la Base de Datos
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
     await DatabaseHelper().insertRecord('Double Tap', _aciertos, segundosJugados);
 
@@ -84,7 +72,7 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       barrierDismissible: false,
       builder: (_) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        backgroundColor: const Color(0xFF1E102E), // Morado muy oscuro
+        backgroundColor: const Color(0xFF1E102E),
         title: const Text('⏱️ ¡FIN!', textAlign: TextAlign.center, style: TextStyle(color: Colors.white)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -107,14 +95,11 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       ),
     );
   }
-
   void _nuevoObjetivo() {
     if (!_jugando) return;
-
     setState(() {
       _circuloActivo = _random.nextInt(4);
     });
-
     _targetTimer?.cancel();
     _targetTimer = Timer(const Duration(milliseconds: 1500), () {
       if (!mounted || !_jugando) return;
@@ -145,8 +130,6 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
         _fallos++;
       }
     });
-
-    // Pequeña pausa antes de sacar el siguiente para que se note el cambio
     Future.delayed(const Duration(milliseconds: 200), () {
       if (mounted) _nuevoObjetivo();
     });
@@ -178,7 +161,6 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
               _scoreBoard(),
 
               const Spacer(),
-
               SizedBox(
                 width: 320,
                 height: 320,
@@ -193,18 +175,16 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
                         ),
                       ),
                     ),
-
-                    // Los 4 objetivos posicionados perfectamente en las esquinas
                     _circulo(0, const Alignment(-0.8, -0.8)),
                     _circulo(1, const Alignment(0.8, -0.8)),
                     _circulo(2, const Alignment(-0.8, 0.8)),
                     _circulo(3, const Alignment(0.8, 0.8)),
 
-                    // Mensaje MUY LENTO en el centro
+
                     if (_muyLento)
                       const Center(
                         child: Text(
-                          '¡MUY LENTO!',
+                          '¡LENTO!',
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.w900,
@@ -225,15 +205,13 @@ class _DoubleTapGameState extends State<DoubleTapGame> {
       ),
     );
   }
-
-
   Widget _customAppBar() => Padding(
     padding: const EdgeInsets.all(20.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white), onPressed: () => Navigator.pop(context)),
-        const Text('DOUBLE TAP', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 2)),
+        const Text('DOUBLE TAAAP', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.purpleAccent, letterSpacing: 2)),
         const SizedBox(width: 40),
       ],
     ),

@@ -10,7 +10,6 @@ class MainMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -26,7 +25,7 @@ class MainMenuScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  "T.D.A. ",
+                  "T.D.A",
                   style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.w900,
@@ -34,18 +33,7 @@ class MainMenuScreen extends StatelessWidget {
                     color: Colors.black87,
                   ),
                 ),
-                const Text(
-                  "(Tactile Digital Activity)",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 3,
-                    color: Colors.black87,
-                  ),
-                ),
                 const SizedBox(height: 60),
-
-                // Botones principales
                 _menuButton(
                   context,
                   'JUGAR',
@@ -72,7 +60,6 @@ class MainMenuScreen extends StatelessWidget {
                       () => Navigator.push(context, MaterialPageRoute(builder: (context) => const RecordsMenuScreen())),
                 ),
                 const SizedBox(height: 40),
-
                 TextButton.icon(
                   onPressed: () => SystemNavigator.pop(),
                   icon: const Icon(Icons.exit_to_app, color: Colors.grey),
@@ -85,7 +72,6 @@ class MainMenuScreen extends StatelessWidget {
       ),
     );
   }
-
   Widget _menuButton(BuildContext context, String text, IconData icon, Color color, VoidCallback onPressed) {
     return Container(
       width: double.infinity,

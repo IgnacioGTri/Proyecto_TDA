@@ -64,8 +64,6 @@ class _LongPressGameState extends State<LongPressGame> {
 
   void _finJuego() async {
     setState(() => _jugando = false);
-
-    // esto guarda en la Base de Datos
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
     await DatabaseHelper().insertRecord('Tag 2 ZEN', _aciertos, segundosJugados);
 
@@ -99,8 +97,6 @@ class _LongPressGameState extends State<LongPressGame> {
       ),
     );
   }
-
-
   void _onLongPressStart() {
     if (!_jugando) return;
 
@@ -132,8 +128,6 @@ class _LongPressGameState extends State<LongPressGame> {
       _presionando = false;
       _inicioPulsacion = null;
     });
-
-    // Volver al texto original después de 1 segundo
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted && !_presionando && _jugando) {
         setState(() {
@@ -167,14 +161,10 @@ class _LongPressGameState extends State<LongPressGame> {
             children: [
               _customAppBar(),
               _scoreBoard(),
-
               const Spacer(),
-
-
               GestureDetector(
                 onLongPressStart: (_) => _onLongPressStart(),
                 onLongPressEnd: (_) => _onLongPressEnd(),
-                // había que usar onLongPressCancel por si el jugador desliza el dedo fuera accidentalmente
                 onLongPressCancel: () {
                   if (_presionando) _onLongPressEnd();
                 },
@@ -218,8 +208,6 @@ class _LongPressGameState extends State<LongPressGame> {
       ),
     );
   }
-
-
   Widget _customAppBar() => Padding(
     padding: const EdgeInsets.all(20.0),
     child: Row(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'Menus/main_menu_screen.dart';
-
 void main() => runApp(const MiMenuApp());
 
 class MiMenuApp extends StatelessWidget {

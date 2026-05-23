@@ -73,11 +73,9 @@ class _DragShapesGameState extends State<DragShapesGame> {
       }
     });
   }
-
   void _reset() {
     _gameTimer?.cancel();
     _roundTimer?.cancel();
-
     setState(() {
       _jugando = false;
       _aciertos = 0;
@@ -220,7 +218,7 @@ class _DragShapesGameState extends State<DragShapesGame> {
                     if (_muyLento)
                       const Center(
                         child: Text(
-                          '¡MUY LENTO!',
+                          '¡LENTO!',
                           style: TextStyle(fontSize: 40, fontWeight: FontWeight.w900, color: Colors.redAccent, shadows: [Shadow(color: Colors.red, blurRadius: 15)]),
                         ),
                       ),
@@ -243,7 +241,7 @@ class _DragShapesGameState extends State<DragShapesGame> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white), onPressed: () => Navigator.pop(context)),
-        const Text('UNE LAS FORMAS', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.blueAccent, letterSpacing: 2)),
+        const Text('SHAPE MATCH', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: Colors.blueAccent, letterSpacing: 2)),
         const SizedBox(width: 40),
       ],
     ),

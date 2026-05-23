@@ -16,24 +16,16 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
   bool _esTurnoDelSistema = false;
   int _ronda = 0;
   late DateTime _horaInicioPartida;
-
-
   List<int> _secuenciaObjetivo = [];
   List<int> _secuenciaUsuario = [];
-
-
   int _botonIluminado = -1;
   final Random _random = Random();
-
-  // Los 4 colores del panel
   final List<Color> _colores = [
     Colors.redAccent,
     Colors.greenAccent,
     Colors.blueAccent,
     Colors.amberAccent,
   ];
-
-
   void _start() {
     setState(() {
       _jugando = true;
@@ -42,7 +34,6 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
       _secuenciaUsuario.clear();
       _horaInicioPartida = DateTime.now();
     });
-
     Future.delayed(const Duration(milliseconds: 500), () {
       if (mounted) _siguienteRonda();
     });
@@ -58,20 +49,15 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
       _botonIluminado = -1;
     });
   }
-
   void _finJuego() async {
     setState(() {
       _jugando = false;
       _esTurnoDelSistema = false;
       _botonIluminado = -1;
     });
-
-    // Guarda en la Base de Datos
     final segundosJugados = DateTime.now().difference(_horaInicioPartida).inSeconds;
     await DatabaseHelper().insertRecord('Simon Dice', _ronda, segundosJugados);
-
     if (!mounted) return;
-
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -105,35 +91,25 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
     setState(() {
       _esTurnoDelSistema = true;
       _secuenciaUsuario.clear();
-      // Añadimos un nuevo color aleatorio a la secuencia
       _secuenciaObjetivo.add(_random.nextInt(4));
     });
-
-    // pausa entre rondas
     await Future.delayed(const Duration(milliseconds: 800));
 
     for (int i = 0; i < _secuenciaObjetivo.length; i++) {
       if (!mounted || !_jugando) return;
 
-      // esto ilumina el botón
       setState(() => _botonIluminado = _secuenciaObjetivo[i]);
 
-      // El tiempo de luz se hace un pelín más rápido en rondas altas
       int tiempoLuz = max(200, 500 - (_ronda * 15));
       await Future.delayed(Duration(milliseconds: tiempoLuz));
 
       if (!mounted || !_jugando) return;
 
-      // esto apaga el botón
       setState(() => _botonIluminado = -1);
 
-      // Tiempo oscuro entre luces
       await Future.delayed(const Duration(milliseconds: 200));
     }
-
     if (!mounted || !_jugando) return;
-
-    // Termina el sistema, le toca al jugador
     setState(() {
       _esTurnoDelSistema = false;
     });
@@ -150,19 +126,15 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
     _secuenciaUsuario.add(index);
     int posicionActual = _secuenciaUsuario.length - 1;
 
-    // Comprobacion si fallas
     if (_secuenciaUsuario[posicionActual] != _secuenciaObjetivo[posicionActual]) {
       _finJuego();
       return;
     }
-
-    // Comprobación si has completado la secuencia entera correctamente
     if (_secuenciaUsuario.length == _secuenciaObjetivo.length) {
       setState(() {
-        _esTurnoDelSistema = true; // Se bloquea para que el jugador no pulse de más
+        _esTurnoDelSistema = true;
         _ronda++;
       });
-
       _siguienteRonda();
     }
   }
@@ -186,7 +158,6 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
               _scoreBoard(),
 
               const Spacer(),
-
               AnimatedOpacity(
                 opacity: _jugando ? 1.0 : 0.0,
                 duration: const Duration(milliseconds: 300),
@@ -202,7 +173,6 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
               ),
 
               const SizedBox(height: 30),
-
               SizedBox(
                 width: 320,
                 height: 320,
@@ -289,7 +259,6 @@ class _SimonDiceGameState extends State<SimonDiceGame> {
       ],
     ),
   );
-
   Widget _botonSimon(int index) {
     bool estaEncendido = _botonIluminado == index;
     Color colorBase = _colores[index];

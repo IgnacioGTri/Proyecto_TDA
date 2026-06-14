@@ -27,13 +27,24 @@ class MainMenuScreen extends StatelessWidget {
                 const Text(
                   "T.D.A",
                   style: TextStyle(
-                    fontSize: 40,
+                    fontSize: 60,
                     fontWeight: FontWeight.w900,
                     letterSpacing: 3,
                     color: Colors.black87,
                   ),
                 ),
-                const SizedBox(height: 60),
+                const SizedBox(height: 5),
+                const Text(
+                  "(Tactile Digital Activity)",
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.5,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 50),
+
                 _menuButton(
                   context,
                   'JUGAR',
@@ -72,6 +83,7 @@ class MainMenuScreen extends StatelessWidget {
       ),
     );
   }
+
   Widget _menuButton(BuildContext context, String text, IconData icon, Color color, VoidCallback onPressed) {
     return Container(
       width: double.infinity,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../BaseDeDatos/DatabaseHelper.dart';
+import 'PantallaGrafico.dart';
 
 class RecordsMenuScreen extends StatelessWidget {
   const RecordsMenuScreen({super.key});
@@ -57,7 +58,6 @@ class RecordsMenuScreen extends StatelessWidget {
               );
             },
           ),
-
           const Divider(height: 1, thickness: 1),
           Expanded(
             child: Padding(
@@ -68,15 +68,12 @@ class RecordsMenuScreen extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
-
                   if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(
                         child: Text("Aún no hay récords guardados")
                     );
                   }
-
                   final records = snapshot.data!;
-
                   return ListView.builder(
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     itemCount: records.length,
@@ -90,11 +87,23 @@ class RecordsMenuScreen extends StatelessWidget {
                         nombrePantalla = "3 PUERTAS";
                         sufijoPuntuacion = "Victorias";
                       }
-
-                      return _recordTile(
-                          nombrePantalla,
-                          "${item['puntuacion']} $sufijoPuntuacion",
-                          "${item['segundosJugados']}s"
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PantallaGrafico(
+                                nombreJuego: idJuego,
+                                nombrePantalla: nombrePantalla,
+                              ),
+                            ),
+                          );
+                        },
+                        child: _recordTile(
+                            nombrePantalla,
+                            "${item['puntuacion']} $sufijoPuntuacion",
+                            "${item['segundosJugados']}s"
+                        ),
                       );
                     },
                   );

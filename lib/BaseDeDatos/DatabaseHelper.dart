@@ -4,17 +4,13 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
-
   factory DatabaseHelper() => _instance;
-
   DatabaseHelper._internal();
-
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
   }
-
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'records_juegos.db');
     return await openDatabase(
@@ -34,44 +30,31 @@ class DatabaseHelper {
   }
   Future<List<Map<String, dynamic>>> getRecords() async {
     final db = await database;
-    return await db.query('records', orderBy: 'puntuacion DESC');
+    return await db.rawQuery('''
+      SELECT nombreJuego, MAX(puntuacion) as puntuacion, SUM(segundosJugados) as segundosJugados 
+      FROM records 
+      GROUP BY nombreJuego 
+      ORDER BY puntuacion DESC
+    ''');
   }
-
   Future<void> insertRecord(String juego, int puntos, int segundos) async {
     final db = await database;
+    await db.insert('records', {
+      'nombreJuego': juego,
+      'puntuacion': puntos,
+      'segundosJugados': segundos,
+      'fecha': DateTime.now().toString(),
+    });
+    print("Partida guardada en el histórico de $juego con $puntos puntos.");
+  }
 
-    List<Map<String, dynamic>> existente = await db.query(
+  Future<List<Map<String, dynamic>>> obtenerHistorialJuego(String juego) async {
+    final db = await database;
+    return await db.query(
       'records',
       where: 'nombreJuego = ?',
       whereArgs: [juego],
+      orderBy: 'fecha ASC',
     );
-
-    if (existente.isEmpty) {
-      await db.insert('records', {
-        'nombreJuego': juego,
-        'puntuacion': puntos,
-        'segundosJugados': segundos,
-        'fecha': DateTime.now().toString(),
-      });
-      print("Primer record guardado para $juego");
-    } else {
-      int recordActual = existente.first['puntuacion'];
-
-      if (puntos > recordActual) {
-        await db.update(
-          'records',
-          {
-            'puntuacion': puntos,
-            'segundosJugados': segundos,
-            'fecha': DateTime.now().toString(),
-          },
-          where: 'nombreJuego = ?',
-          whereArgs: [juego],
-        );
-        print("¡Nuevo récord personal en $juego!");
-      } else {
-        print("No superaste el récord anterior de $recordActual");
-      }
-    }
   }
 }

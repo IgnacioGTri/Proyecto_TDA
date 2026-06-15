@@ -12,14 +12,11 @@ import '../BotonesExtrax/Favoritos.dart';
 
 class GamesMenuScreen extends StatefulWidget {
   const GamesMenuScreen({super.key});
-
   @override
   State<GamesMenuScreen> createState() => _GamesMenuScreenState();
 }
-
 class _GamesMenuScreenState extends State<GamesMenuScreen> {
   List<String> _favoritosGuardados = [];
-
   @override
   void initState() {
     super.initState();
@@ -41,6 +38,38 @@ class _GamesMenuScreenState extends State<GamesMenuScreen> {
       }
     });
     await prefs.setStringList('juegos_favoritos', _favoritosGuardados);
+  }
+  void _mostrarInfoJuego(BuildContext context, String nombre, String descripcion, Color color) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+            title: Row(
+              children: [
+                Icon(Icons.info_outline, color: color, size: 28),
+                const SizedBox(width: 10),
+                Expanded(
+                    child: Text(
+                        nombre,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
+                    )
+                ),
+              ],
+            ),
+            content: Text(
+                descripcion,
+                style: const TextStyle(fontSize: 16, height: 1.4)
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('ENTENDIDO', style: TextStyle(color: color, fontWeight: FontWeight.bold)),
+              ),
+            ],
+          );
+        }
+    );
   }
 
   @override
@@ -74,21 +103,35 @@ class _GamesMenuScreenState extends State<GamesMenuScreen> {
           crossAxisSpacing: 20,
           mainAxisSpacing: 20,
           children: [
-            _gameCard(context, 'TAP TAP', Icons.touch_app, Colors.orange, const TapGameWidget()),
-            _gameCard(context, 'ARRASTRA', Icons.ads_click, Colors.blue, const DragGameWidget()),
-            _gameCard(context, 'ESTRELLAS', Icons.auto_awesome, Colors.amber, const StarTapGame()),
-            _gameCard(context, 'MANTÉN', Icons.timer_outlined, Colors.green, const LongPressGame()),
-            _gameCard(context, 'DOBLE TAP', Icons.repeat_one, Colors.purple, const DoubleTapGame()),
-            _gameCard(context, 'FORMAS', Icons.category_rounded, Colors.red, const DragShapesGame()),
-            _gameCard(context, 'SIMON DICE', Icons.memory, Colors.pinkAccent, const SimonDiceGame()),
-            _gameCard(context, '3 PUERTAS', Icons.meeting_room, Colors.teal, const Juego8()),
+            _gameCard(context, 'TAP TAP', Icons.touch_app, Colors.orange, const TapGameWidget(),
+                "Pon a prueba tu velocidad pulsando la pantalla tantas veces como puedas antes de que se acabe el tiempo."),
+
+            _gameCard(context, 'ARRASTRA', Icons.ads_click, Colors.blue, const DragGameWidget(),
+                "Mejora tu coordinación deslizando rápidamente cada elemento hacia su objetivo central."),
+
+            _gameCard(context, 'ESTRELLAS', Icons.auto_awesome, Colors.amber, const StarTapGame(),
+                "Entrena tu atención cazando las estrellas correctas antes de que desaparezcan."),
+
+            _gameCard(context, 'MANTÉN', Icons.timer_outlined, Colors.green, const LongPressGame(),
+                "Trabaja tu percepción del tiempo. Mantén pulsado el botón y suéltalo justo entre los 2 y 3 segundos exactos."),
+
+            _gameCard(context, 'DOBLE TAP', Icons.repeat_one, Colors.purple, const DoubleTapGame(),
+                "Estimula tus reflejos rápidos tocando exactamente dos veces los círculos que se iluminen."),
+
+            _gameCard(context, 'FORMAS', Icons.category_rounded, Colors.red, const DragShapesGame(),
+                "Arrastra cada figura geométrica a su silueta correcta antes de que se acabe el límite de tiempo."),
+
+            _gameCard(context, 'SIMON DICE', Icons.memory, Colors.pinkAccent, const SimonDiceGame(),
+                "Clásico reto de memoria. Observa la secuencia de colores que da el sistema y repítela sin equivocarte."),
+
+            _gameCard(context, '3 PUERTAS', Icons.meeting_room, Colors.teal, const Juego8(),
+                "Basado en el dilema de Monty Hall. Encuentra el premio y descubre cómo cambian tus probabilidades de ganar si decides cambiar de puerta."),
           ],
         ),
       ),
     );
   }
-
-  Widget _gameCard(BuildContext context, String nombre, IconData icono, Color color, Widget destino) {
+  Widget _gameCard(BuildContext context, String nombre, IconData icono, Color color, Widget destino, String descripcion) {
     bool esFavorito = _favoritosGuardados.contains(nombre);
 
     return Stack(
@@ -129,11 +172,39 @@ class _GamesMenuScreenState extends State<GamesMenuScreen> {
                     color: Colors.grey.shade800,
                     letterSpacing: 0.5,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
           ),
         ),
+        Positioned(
+          top: 12,
+          left: 12,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(20),
+              onTap: () => _mostrarInfoJuego(context, nombre, descripcion, color),
+              child: Container(
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 4),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.info_outline,
+                  size: 20,
+                  color: Colors.blueGrey,
+                ),
+              ),
+            ),
+          ),
+        ),
+
         Positioned(
           top: 12,
           right: 12,

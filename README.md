@@ -79,3 +79,14 @@ Inicializa la app.
 Configura rutas y navegación.
 Define el tema global.
 Establece la pantalla inicial.
+
+Pasos necesarios para el funcionamiento de la app. 
+
+-Descargar Android Studio
+-Pluggin necesarios: Fluuter y Dart
+-Descargar el pluggin de flutter para el pc: https://docs.flutter.dev/packages-and-plugins/developing-packages
+-Colocar el archivo descargado en el disco local /C
+-Crear un proyecto flutter en Android Studio
+-Sustituir la carperta 'lib' y 'pubspec.yaml' del proyecto recien creado.
+-Abrir el proyecto en Android Studio y pulsar 'Pub get' 
+-Una vez terminado, usar el dispositivo simulado dentro de Android Studio. 
